@@ -6,6 +6,7 @@ A very simple hyperloglog implementation based on `Probably.jl`'s hyperloglog. H
 ```bash
 git clone https://github.com/SaiCharanMarrivada/hyperloglog.git
 cd hyperloglog
+./install_deps.sh
 make run
 ```
 By default `g++` is used, to use `clang++` change the last line to `make CLANG=1 run`.
