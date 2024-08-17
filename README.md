@@ -8,3 +8,6 @@ git clone https://github.com/SaiCharanMarrivada/hyperloglog.git
 cd hyperloglog
 make run
 ```
+
+# Benchmark
+The code is run on Intel .tm i7-13700 cpu with 24 threads. ![alt text](running_times.pdf)
