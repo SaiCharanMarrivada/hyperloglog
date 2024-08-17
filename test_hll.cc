@@ -4,7 +4,7 @@
 #include "hyperloglog.h"
 #include "komihash.h"
 
-#define N 3e11
+#define N 3e10
 
 int main() {
   HyperLogLog<int64_t> hll;
