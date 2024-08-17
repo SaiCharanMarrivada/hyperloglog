@@ -8,7 +8,7 @@ git clone https://github.com/SaiCharanMarrivada/hyperloglog.git
 cd hyperloglog
 make run
 ```
-By default `g++` is used, to use `clang++` change the last line to `make CLANG=1 run`
+By default `g++` is used, to use `clang++` change the last line to `make CLANG=1 run`.
 
 # Benchmark
-The code is run on Intel .tm i7-13700 cpu with 24 threads. ![](./running_times.png?raw=true)
+The code is run on Intel &trade i7-13700 cpu with 24 threads. ![](./running_times.png?raw=true). OpenMP &trade is used for multithreading. 
