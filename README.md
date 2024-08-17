@@ -1,6 +1,7 @@
 # hyperloglog
 
-A very simple hyperloglog implementation based on `Probably.jl`'s hyperloglog. Hyperloglog can estimate large cardinalities using sub-linear space, for instance using only 16KiB, one can estimate cardinalities as high as $2^{62}$. Hash function provided should have good uniform distribution for hyperloglog to work correctly.
+A very simple hyperloglog implementation based on `Probably.jl`'s hyperloglog(< 100 LOC). Hyperloglog can estimate large cardinalities using sub-linear space, for instance using only 16KiB, one can estimate cardinalities as high as $2^{62}$. Hash function provided should have good uniform distribution for hyperloglog to work correctly.
+This requires compiler with C++20 support.
 
 # How to run
 ```bash
@@ -45,4 +46,8 @@ int main() {
 ```
 
 # Benchmark
-The code is run on Intel &trade; i7-13700 cpu with 24 threads. OpenMP is used for multithreading. ![](./running_times.png?raw=true) 
+`test_hll.cc` is run on Intel &trade; i7-13700 24-core cpu with 1-24 threads. OpenMP is used for multithreading. ![](./running_times.png?raw=true).
+
+# TODO
+- [] add other operations like set-difference, set-intersection and so on.
+- [] add support for serialization-deserialization.
