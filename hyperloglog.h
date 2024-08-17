@@ -1,9 +1,11 @@
 #ifndef _HYPERLOGLOG_H
 #define _HYPERLOGLOG_H
 
-#include <bit>
 #include <algorithm>
+#include <bit>
 #include <cstdint>
+#include <memory>
+
 #include "constants.h"
 
 template <typename T, int precision = 14>
@@ -11,7 +13,7 @@ struct HyperLogLog {
  private:
 #ifdef STACK_ALLOCATE
   uint8_t counts[1 << precision] = {0};
-#else 
+#else
   uint8_t *counts;
 #endif
 
@@ -101,7 +103,7 @@ struct HyperLogLog {
   void insert(T x) {
     auto h = std::hash<T>()(x);
     auto bin = getbin(h);
-    counts[bin] = std::max(getzeros(h), counts[bin]);
+	counts[bin] = std::max(getzeros(h), counts[bin]);
   }
 
   void add(T x) { insert(x); }
