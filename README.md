@@ -11,4 +11,4 @@ make run
 By default `g++` is used, to use `clang++` change the last line to `make CLANG=1 run`.
 
 # Benchmark
-The code is run on Intel &trade; i7-13700 cpu with 24 threads. OpenMP &trade; is used for multithreading. ![](./running_times.png?raw=true) 
+The code is run on Intel &trade; i7-13700 cpu with 24 threads. OpenMP is used for multithreading. ![](./running_times.png?raw=true) 
