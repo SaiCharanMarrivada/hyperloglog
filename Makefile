@@ -1,10 +1,16 @@
-CPP = g++
-CCFLAGS = -Wall -fopenmp --std=c++20
+CLANG=0
+CCFLAGS = -Wall --std=c++20 -fopenmp
 INCLUDES = -I./benchmark/include/
-OPTFLAGS = -O3 -DCMOV -funroll-loops -march=native
+OPTFLAGS = -O3 -funroll-loops -march=native # -DCMOV
 LFLAGS = -L./benchmark/build/src/ -lbenchmark
 STACKALLOCATE = 1
 DEBUG = 0
+
+ifeq ($(CLANG), 0)
+	CPP = g++
+else
+	CPP = clang++
+endif
 
 ifeq ($(STACKALLOCATE), 1)
 	OPTFLAGS += -DSTACK_ALLOCATE
@@ -18,7 +24,7 @@ test_hll: test_hll.cc
 	$(CPP) $(INCLUDES) $(CCFLAGS) $(OPTFLAGS) test_hll.cc -o test_hll $(LFLAGS)
 
 run: test_hll
-	./test_hll
+	./test_hll --benchmark_time_unit=s
 
 clean:
 	rm test_hll
