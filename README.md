@@ -10,4 +10,4 @@ make run
 ```
 
 # Benchmark
-The code is run on Intel .tm i7-13700 cpu with 24 threads. ![image info](./running_times.png)
+The code is run on Intel .tm i7-13700 cpu with 24 threads. ![](./running_times.png?raw=true)
