@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <bit>
+#include <cmath>
 #include <cstdint>
 #include <memory>
 
@@ -103,7 +104,7 @@ struct HyperLogLog {
   void insert(T x) {
     auto h = std::hash<T>()(x);
     auto bin = getbin(h);
-	counts[bin] = std::max(getzeros(h), counts[bin]);
+    counts[bin] = std::max(getzeros(h), counts[bin]);
   }
 
   void add(T x) { insert(x); }
