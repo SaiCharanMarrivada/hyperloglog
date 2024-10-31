@@ -13,7 +13,7 @@ template <typename T, int precision = 14>
 struct HyperLogLog {
  private:
 #ifdef STACK_ALLOCATE
-  uint8_t counts[1 << precision] = {0};
+  alignas(32) uint8_t counts[1 << precision] = {0};
 #else
   uint8_t *counts;
 #endif
