@@ -1,5 +1,5 @@
 CLANG=0
-CCFLAGS = -Wall --std=c++20 -fopenmp
+CCFLAGS = -Wall -fopenmp
 INCLUDES = -I./benchmark/include/
 OPTFLAGS = -O3 -funroll-loops -march=native # -DCMOV
 LFLAGS = -L./benchmark/build/src/ -lbenchmark
@@ -20,7 +20,7 @@ ifeq ($(DEBUG), 1)
 	OPTFLAGS += -g
 endif
 
-test_hll: test_hll.cc
+test_hll: test_hll.cc hyperloglog.h
 	$(CPP) $(INCLUDES) $(CCFLAGS) $(OPTFLAGS) test_hll.cc -o test_hll $(LFLAGS)
 
 run: test_hll
