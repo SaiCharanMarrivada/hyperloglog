@@ -15,7 +15,8 @@ struct HyperLogLog {
     private:
         static_assert(precision >= 4 && precision <= 20, "`precision` should be between 4 and 20");
         // pass-by-value if `T` is trivially copyable else pass-by-reference
-        using Type = typename std::conditional<std::is_trivially_copyable<T>::value,T, T &>::type;
+        using Type =
+            typename std::conditional<std::is_trivially_copyable<T>::value,T, T &>::type;
         using Hash = std::hash<T>;
 #ifdef STACK_ALLOCATE
         alignas(32) uint8_t counts[1 << precision] = {0};
