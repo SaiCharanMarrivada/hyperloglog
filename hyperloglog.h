@@ -104,7 +104,7 @@ struct HyperLogLog {
             return std::round(biased_estimate - bias(biased_estimate));
         }
 
-        void operator+=(HyperLogLog const &hll) {
+        void operator+=(HyperLogLog<T, precision> const &hll) {
             for (int i = 0; i < (1 << precision); i++) {
                 counts[i] = std::max(counts[i], hll.counts[i]);
             }
