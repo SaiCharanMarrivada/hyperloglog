@@ -3,7 +3,7 @@
 #include "hyperloglog.h"
 #include "komihash.h"
 
-#define N 3e10
+#define N 3e8
 
 void test_hll(benchmark::State &state) {
     for (auto _ : state) {

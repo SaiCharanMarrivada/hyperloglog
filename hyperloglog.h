@@ -16,9 +16,10 @@ struct HyperLogLog {
         static_assert(precision >= 4 && precision <= 20,
             "`precision` should be between 4 and 20");
         // pass-by-value if `T` is trivially copyable else pass-by-reference
-        using Type =
-            typename std::conditional<std::is_trivially_copyable<T>::value, T, T &>::type;
-        using Hash = std::hash<T>;
+        using Type = 
+            typename std::conditional_t<std::is_trivially_copyable_v<T>, T, T &>;
+        static constexpr std::hash<T> hasher{};
+
 #ifdef STACK_ALLOCATE
         alignas(32) uint8_t counts[1 << precision] = {0};
 #else
@@ -49,8 +50,8 @@ struct HyperLogLog {
         }
 
         double bias(double biased_estimate) const {
-            const auto raw_array = RAW_ARRAYS[precision - 4];
-            const auto bias_array = BIAS_ARRAYS[precision - 4];
+            constexpr auto raw_array = RAW_ARRAYS[precision - 4];
+            constexpr auto bias_array = BIAS_ARRAYS[precision - 4];
             auto first_index =
                 std::upper_bound(raw_array.begin(), raw_array.end(), biased_estimate);
 
@@ -95,7 +96,7 @@ struct HyperLogLog {
         size_t size() const {
             // only approx
             double harmonic_mean = 0;
-            const auto hll_size = (1 << precision);
+            constexpr auto hll_size = (1 << precision);
             for (int i = 0; i < hll_size; i++) {
                 harmonic_mean += std::pow(2, -counts[i]);
             }
@@ -111,7 +112,7 @@ struct HyperLogLog {
         }
 
         void insert(Type x) {
-            auto h = Hash()(x);
+            auto h = hasher(x);
             auto bin = getbin(h);
             counts[bin] = std::max(getzeros(h), counts[bin]);
         }
