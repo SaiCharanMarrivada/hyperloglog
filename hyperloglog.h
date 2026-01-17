@@ -9,31 +9,19 @@
 
 #include "constants.h"
 
-
 template <typename T, int precision = 14>
 struct HyperLogLog {
     private:
-        static_assert(precision >= 4 && precision <= 20,
-            "`precision` should be between 4 and 20");
+        static_assert(precision >= 4 && precision <= 20);
         // pass-by-value if `T` is trivially copyable else pass-by-reference
-        using Type = 
-            typename std::conditional_t<std::is_trivially_copyable_v<T>, T, T &>;
+        using Type = std::conditional_t<std::is_trivially_copyable_v<T>, T, const T &>; 
         static constexpr std::hash<T> hasher{};
 
 #ifdef STACK_ALLOCATE
-        alignas(32) uint8_t counts[1 << precision] = {0};
+        alignas(64) uint8_t counts[1 << precision] = {0};
 #else
         uint8_t *counts;
 #endif
-
-        uint8_t getzeros(size_t x) const {
-            constexpr auto or_mask = ((1UL << precision) - 1) << (64 - precision);
-            return std::__countr_zero(x | or_mask) + 1;
-        }
-
-        int getbin(size_t x) const {
-            return (x >> (64 - precision));
-        }
 
         // systematic bias correction
         constexpr double alpha() const {
@@ -50,8 +38,8 @@ struct HyperLogLog {
         }
 
         double bias(double biased_estimate) const {
-            constexpr auto raw_array = RAW_ARRAYS[precision - 4];
-            constexpr auto bias_array = BIAS_ARRAYS[precision - 4];
+            const auto raw_array = RAW_ARRAYS[precision - 4];
+            const auto bias_array = BIAS_ARRAYS[precision - 4];
             auto first_index =
                 std::upper_bound(raw_array.begin(), raw_array.end(), biased_estimate);
 
@@ -105,7 +93,7 @@ struct HyperLogLog {
             return std::round(biased_estimate - bias(biased_estimate));
         }
 
-        void operator+=(HyperLogLog<T, precision> const &hll) {
+        void operator+=(const HyperLogLog<T, precision> &hll) {
             for (int i = 0; i < (1 << precision); i++) {
                 counts[i] = std::max(counts[i], hll.counts[i]);
             }
@@ -113,8 +101,14 @@ struct HyperLogLog {
 
         void insert(Type x) {
             auto h = hasher(x);
-            auto bin = getbin(h);
-            counts[bin] = std::max(getzeros(h), counts[bin]);
+            uint8_t trailing_zeros = std::countr_zero(h);
+            auto bin = h >> (64 - precision);
+            if (counts[bin] < trailing_zeros + 1) {
+                counts[bin] = trailing_zeros + 1;
+            }
+            if (trailing_zeros > 64 - precision) [[unlikely]] {
+                counts[bin] = 65 - precision;
+            }
         }
 };
 

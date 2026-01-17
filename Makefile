@@ -1,7 +1,7 @@
 CLANG=0
-CCFLAGS = -Wall -fopenmp
+CCFLAGS = -std=c++20 -Wall -fopenmp
 INCLUDES = -I./benchmark/include/
-OPTFLAGS = -O3 -funroll-loops -march=native # -DCMOV
+OPTFLAGS = -O3 -march=native -DCMOV
 LFLAGS = -L./benchmark/build/src/ -lbenchmark
 STACKALLOCATE = 1
 DEBUG = 0
